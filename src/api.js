@@ -32,7 +32,15 @@ const lastYear=`${currentYear-1}-${currentMonth}-${currentDay}`
 const nextYear=`${currentYear+1}-${currentMonth}-${currentDay}`
 
 //popular games
-const popular_games=`games?key=api_key&date=${lastYear},${currentDate}&ordering=-rating&page_size=10`
+const popular_games=`games?key=72cdfee883ab4982954f39e1b0035d86&date=${lastYear},${currentDate}&ordering=-rating&page_size=10`
+const upcoming_games=`games?key=72cdfee883ab4982954f39e1b0035d86&date=${currentDate},${nextYear}&ordering=-added&page_size=10`
+const newGames=`games?key=72cdfee883ab4982954f39e1b0035d86&date=${lastYear},${currentDate}&ordering=-released&page_size=10`
 
-export const popularGamesUrl=()=> `${base_url}${popular_games}`
+export const popularGamesURL=()=> `${base_url}${popular_games}`
+export const upcomingGamesURL=()=> `${base_url}${upcoming_games}`
+export const newGamesURL=()=> `${base_url}${newGames}`
 
+//Game Details
+export const gameDetailsURL=(game_id)=>`${base_url}games/${game_id}?key=72cdfee883ab4982954f39e1b0035d86`
+//Screenshots
+export const gameScreenshotURL=(game_id)=>`${base_url}games/${game_id}/screenshots?key=72cdfee883ab4982954f39e1b0035d86`
