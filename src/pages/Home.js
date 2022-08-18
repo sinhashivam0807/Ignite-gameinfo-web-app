@@ -2,10 +2,13 @@ import React,{useEffect} from "react";
 import {useDispatch,useSelector} from 'react-redux';
 import { loadGames } from "../actions/gamesActions";
 import GameDetail from "../components/GameDetail";
+import { fadeIn } from "../animations";
+
 
 //Styling and Component
 import styled from "styled-components"
-import {motion} from "framer-motion"
+import {motion,AnimatePresence, AnimateSharedLayout} from "framer-motion"
+
 import Game from "../components/Game";
 
 import {useLocation} from "react-router-dom"
@@ -13,18 +16,39 @@ import {useLocation} from "react-router-dom"
 const Home=()=>{
     //Fetch Games
     const location=useLocation()
-    const pathID=location.pathname.split("/")[2];
+    const pathId=location.pathname.split("/")[2];
     const dispatch=useDispatch();
     useEffect(()=>{
       dispatch(loadGames());
     },[dispatch]);
     //get games back from state
-    const{popular,newGames,upcoming}=useSelector((state)=>state.games)
+    const { popular, newGames, upcoming, searched } = useSelector(
+        (state) => state.games
+      );
 
     return(
         
-        <GameList>
-            {pathID && <GameDetail/>}
+        <GameList variants={fadeIn} initial="hidden" animate="show">
+            <AnimateSharedLayout>
+            <AnimatePresence>{pathId && <GameDetail pathId={pathId}/>}</AnimatePresence>
+            {searched.length ? (
+          <div className="searched">
+            <h2>Searched Games</h2>
+            <Games>
+              {searched.map((game) => (
+                <Game
+                  name={game.name}
+                  released={game.released}
+                  id={game.id}
+                  image={game.background_image}
+                  key={game.id}
+                />
+              ))}
+            </Games>
+          </div>
+        ) : (
+          ""
+        )}
             <h2>Upcoming Games</h2>
             <Games>
                 {upcoming.map(game=>(
@@ -61,6 +85,7 @@ const Home=()=>{
                 ))}
                 
             </Games>
+            </AnimateSharedLayout>
         </GameList>
         
     )
